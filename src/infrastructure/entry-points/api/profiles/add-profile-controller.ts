@@ -1,7 +1,7 @@
 import {Mapping, Post, Body, NotFoundException, BadRequestException, Adapter} from "@tsclean/core";
 import {ADD_PROFILE_SERVICE, IAddProfileService} from "@/domain/use-cases";
 import {AddProfileParams, ProfileModel} from "@/domain/models";
-import {ValidateFields, validateObjectId} from "@/infrastructure/entry-points";
+import {Auth, ValidateFields, validateObjectId} from "@/infrastructure/entry-points";
 
 @Mapping('api/v1/add-profile')
 export class AddProfileController {
@@ -12,6 +12,7 @@ export class AddProfileController {
     }
 
     @Post()
+    @Auth(["admin", "manager"])
     async addProfileController(@Body() data: AddProfileParams): Promise<ProfileModel | unknown> {
 
         const {skills, status, user} = data;

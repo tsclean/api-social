@@ -1,7 +1,7 @@
 import {Mapping, Put, Adapter, NotFoundException, Req} from "@tsclean/core";
 import {ILoadProfileByIdRepository, LOAD_PROFILE_BY_ID_REPOSITORY} from "@/domain/models";
 import {DELETE_EDUCATION_SERVICE, IDeleteEducationService} from "@/domain/use-cases";
-import {validateObjectId} from "@/infrastructure/entry-points";
+import {Auth, validateObjectId} from "@/infrastructure/entry-points";
 
 @Mapping('api/v1/profiles')
 export class DeleteEducationController {
@@ -16,6 +16,7 @@ export class DeleteEducationController {
     
 
     @Put(":profileId/delete-education/:educationId")
+    @Auth(["admin", "manager"])
     async deleteEducationController(@Req() request): Promise<any> {
         // Destructuring params
         const {profileId, educationId} = request["params"];
@@ -30,13 +31,9 @@ export class DeleteEducationController {
         // Profile exist
         const profileRef = await this.loadProfileByIdRepository.loadProfileById(profileId);
 
-        // Validate that the experience is successful in order to eliminate it.
-        let education: boolean;
-        for (const item of profileRef.education) {
-            education = item["_id"].toString() === educationId
-        }
-
-        if (education === false) return new NotFoundException();
+        // Validate that the education is successful in order to eliminate it.
+        const validateEducation = profileRef.education.find(item => item["_id"].toString() === educationId);
+        if (!validateEducation) return new NotFoundException();
 
         const educationRef = await this.deleteEducationService.deleteEducation(profileId, educationId);
 

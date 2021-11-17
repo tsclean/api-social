@@ -1,15 +1,16 @@
 import {Adapter, Service} from "@tsclean/core";
-import {ILoadProfileByIdService} from "@/domain/use-cases";
+import {ILoadProfileByIdService} from "@/domain/use-cases/profiles/load-profile-by-id-service";
 import {ILoadProfileByIdRepository, LOAD_PROFILE_BY_ID_REPOSITORY, ProfileModel} from "@/domain/models";
 
 @Service()
 export class LoadProfileByIdServiceImpl implements ILoadProfileByIdService {
     constructor(
-        @Adapter(LOAD_PROFILE_BY_ID_REPOSITORY) private readonly loadProfile: ILoadProfileByIdRepository
+        @Adapter(LOAD_PROFILE_BY_ID_REPOSITORY)
+        private readonly loadProfileByIdRepository: ILoadProfileByIdRepository
     ) {
     }
 
-    async loadProfileByIdService(id: string): Promise<ProfileModel> {
-        return await this.loadProfile.loadProfileById(id);
+    async loadProfileById(id: string): Promise<ProfileModel> {
+        return await this.loadProfileByIdRepository.loadProfileById(id);
     }
 }

@@ -10,16 +10,11 @@ import {
 export class DeleteExperienceServiceImpl implements IDeleteExperienceService {
     constructor(
         @Adapter(DELETE_EXPERIENCE_REPOSITORY)
-        private readonly deleteExperienceRepository: IDeleteExperienceRepository,
-        @Adapter(LOAD_PROFILE_BY_ID_REPOSITORY)
-        private readonly loadProfileByIdRepository: ILoadProfileByIdRepository
+        private readonly deleteExperienceRepository: IDeleteExperienceRepository
     ) {
     }
 
     async deleteExperience(profileId: string, experienceId: string | number): Promise<unknown> {
-        const profile = await this.loadProfileByIdRepository.loadProfileById(profileId);
-        if (!profile) return false;
-
-        await this.deleteExperienceRepository.deleteExperience(profileId, experienceId);
+       return await this.deleteExperienceRepository.deleteExperience(profileId, experienceId);
     }
 }

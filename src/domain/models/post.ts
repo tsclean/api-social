@@ -1,12 +1,12 @@
 export type PostModel = {
-    id: string | number;
-    user: string | number;
+    id?: any;
+    user: any;
     text: string;
     name: string;
     avatar: string;
-    likes: LikesModel[];
-    comments: CommentsModel[],
-    date: Date;
+    likes?: LikesModel[];
+    comments?: CommentsModel[],
+    date: unknown;
 }
 
 export type LikesModel = [

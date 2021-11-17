@@ -1,4 +1,3 @@
-import {ObjectId} from "mongodb";
 import {
     AddProfileParams,
     IAddEducationRepository,
@@ -46,24 +45,22 @@ export class ProfileMongooseRepositoryAdapter<T> implements IAddProfileRepositor
     }
 
     async deleteProfile(id: string | number): Promise<boolean | unknown> {
-        const idx = new ObjectId(id);
-        return await ProfileModelSchema.findByIdAndDelete(idx).exec();
+        return await ProfileModelSchema.deleteOne({id: id}).exec();
     }
 
     async addExperience(id: string, experiences): Promise<void> {
-        let experience: [] = [];
-        for (const item in experiences) experience = experiences[item];
-
         await ProfileModelSchema.updateOne({
-            id: id["id"], $push: {
-                "experience": experience
+            user: id
+        }, {
+            $push: {
+                "experience": experiences
             }
         })
     }
 
     async deleteExperience(profileId: string | number, experienceId: string | number): Promise<unknown | any> {
         await ProfileModelSchema.updateOne({
-            id: profileId
+            _id: profileId
         }, {
             $pull: {
                 "experience": {_id: experienceId}
@@ -72,19 +69,18 @@ export class ProfileMongooseRepositoryAdapter<T> implements IAddProfileRepositor
     }
 
     async addEducation(id: string | number, educations: []): Promise<void> {
-        let education: [] = [];
-        for (const item in educations) education = educations[item];
-
         await ProfileModelSchema.updateOne({
-            id: id["id"], $push: {
-                "education": education
+            user: id
+        }, {
+            $push: {
+                "education": educations
             }
         })
     }
 
     async deleteEducation(profileId: string | number, educationId: string | number): Promise<void> {
         await ProfileModelSchema.updateOne({
-            id: profileId
+            _id: profileId
         }, {
             $pull: {
                 "education": {_id: educationId}

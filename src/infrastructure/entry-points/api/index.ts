@@ -1,4 +1,4 @@
-import {AddUserController} from "@/infrastructure/entry-points/api/users";
+import {AddUserController, LoadUserByIdController} from "@/infrastructure/entry-points/api/users";
 import {AuthController} from "@/infrastructure/entry-points/api/auth";
 import {
     AddEducationController,
@@ -6,20 +6,36 @@ import {
     AddProfileController,
     DeleteEducationController,
     DeleteExperienceController,
-    DeleteProfileController,
-    LoadProfileByIdController,
+    DeleteProfileController, LoadProfileByIdController,
     LoadProfilesController
 } from "@/infrastructure/entry-points/api/profiles";
+import {
+    AddCommentController,
+    AddLikeController,
+    AddPostController, DeleteCommentController, DeleteLikeController,
+    DeletePostController,
+    LoadPostByIdController,
+    LoadPostsController
+} from "@/infrastructure/entry-points/api/posts";
 
 export const controllers = [
     AddUserController,
     AuthController,
     AddProfileController,
-    LoadProfileByIdController,
     LoadProfilesController,
     DeleteProfileController,
     AddExperiencesController,
     DeleteExperienceController,
     AddEducationController,
-    DeleteEducationController
+    DeleteEducationController,
+    AddPostController,
+    LoadUserByIdController,
+    LoadPostsController,
+    LoadPostByIdController,
+    DeletePostController,
+    AddLikeController,
+    DeleteLikeController,
+    AddCommentController,
+    DeleteCommentController,
+    LoadProfileByIdController
 ];
