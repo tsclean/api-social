@@ -10,10 +10,10 @@ services:
       - mongo-db:/data/db
       - mongo-configdb:/data/configdb
 
-  api-social:
+  api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./src/deployment/Dockerfile
     depends_on:
       - mongo
     volumes:
