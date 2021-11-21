@@ -11,7 +11,7 @@ import {
     ILoadProfilesRepository, ProfileModel
 } from "@/domain/models";
 import {isObject} from "@/infrastructure/entry-points";
-import {ProfileModelSchema} from "@/infrastructure/driven-adapters";
+import {PostModelSchema, ProfileModelSchema, UserModelSchema} from "@/infrastructure/driven-adapters";
 
 export class ProfileMongooseRepositoryAdapter<T> implements IAddProfileRepository,
     ILoadProfileByUserIdRepository<T>,
@@ -28,7 +28,10 @@ export class ProfileMongooseRepositoryAdapter<T> implements IAddProfileRepositor
     }
 
     async loadProfileByUserId(id: T): Promise<ProfileModel> {
-        return await ProfileModelSchema.findOne({user: id}).exec();
+        return await ProfileModelSchema.findOne({user: id}).populate({
+            path: 'user',
+            select: ['name', 'avatar']
+        }).exec();
     }
 
     async loadProfileById(idx: string): Promise<ProfileModel> {
@@ -44,8 +47,12 @@ export class ProfileMongooseRepositoryAdapter<T> implements IAddProfileRepositor
         return await ProfileModelSchema.find().populate({path: 'user', select: ['name', 'avatar']}).exec();
     }
 
-    async deleteProfile(id: string | number): Promise<boolean | unknown> {
-        return await ProfileModelSchema.deleteOne({id: id}).exec();
+    async deleteProfile(userId: string | number): Promise<boolean | unknown> {
+        return await Promise.all([
+            await PostModelSchema.deleteOne({user: userId}).exec(),
+            await ProfileModelSchema.deleteOne({user: userId}).exec(),
+            await UserModelSchema.findByIdAndDelete({_id: userId}).exec()
+        ]);
     }
 
     async addExperience(id: string, experiences): Promise<void> {

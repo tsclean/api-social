@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-db:/data/db
+      - mongo-configdb:/data/configdb
+
+  api-social:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    ports:
+      - "9000:9000"
+    environment:
+      - NODE_ENV=development
+      - PORT=9000
+      - MONGO_DEVELOPMENT=mongodb://mongo:27017/tsclean
+    command: "npm run watch"
+
+volumes:
+  mongo-db:
+  mongo-configdb:

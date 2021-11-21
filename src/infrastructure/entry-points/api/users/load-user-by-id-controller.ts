@@ -17,7 +17,12 @@ export class LoadUserByIdController {
         const idx = validateObjectId(id["id"]);
         if (!idx) return new NotFoundException();
 
-        return await this.loadUserByIdService.loadUserById(id);
+        const user = await this.loadUserByIdService.loadUserById(id);
+        if (user === null) return new NotFoundException("User not found")
 
+        return {
+            message: "Detail user successfully",
+            user: true
+        }
     }
 }
