@@ -22,7 +22,7 @@ export class LoadUserByIdController {
 
         return {
             message: "Detail user successfully",
-            user: true
+            user
         }
     }
 }
