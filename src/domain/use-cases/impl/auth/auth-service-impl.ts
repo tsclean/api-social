@@ -21,7 +21,7 @@ export class AuthServiceImpl implements IAuthService {
         const account = await this.checkEmailRepository.checkEmail(data.email);
         const isValid = await this.hashCompareRepository.compareRepository(data.password, account.password);
         if (isValid) {
-            const token = await this.encryptRepository.encryptRepository(account.id);
+            const token = await this.encryptRepository.encryptRepository(account.id, account.roles as any);
 
             return  {
                 accessToken: token,

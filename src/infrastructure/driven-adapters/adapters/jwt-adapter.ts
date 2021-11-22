@@ -12,8 +12,8 @@ export class JwtAdapter implements IEncryptRepository, AccessResourceInterface {
     ) {
     }
     
-    async encryptRepository(text: string): Promise<string> {
-        const payload = {id: text}
+    async encryptRepository(text: string, roles: []): Promise<string> {
+        const payload = {id: text, roles: roles}
         return jwt.sign({account: payload}, process.env.JWT_SECRET, {expiresIn: "1d"})
     }
 

@@ -23,7 +23,8 @@ const schema = new Schema<UserModel>({
     },
     date: {
         type: String
-    }
+    },
+    roles: [{ role: String }]
 });
 
 export const UserModelSchema = model<UserModel>('users', schema);
